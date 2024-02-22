@@ -1,6 +1,6 @@
-const { Error } = require('mongoose');
+//const { Error } = require('mongoose');
 const Role = require('../models/role');
-const Usuario = require('../models/usuario');
+const { Usuario, Categoria, Producto } = require('../models');
 
 
 
@@ -21,17 +21,53 @@ const emailExiste = async( correo = '') => {
     }
 
 
-    const existeUsuarioPorId = async( id ) => {
-        const existeUsuario = await Usuario.findById( id );
+const existeUsuarioPorId = async( id ) => {
+     const existeUsuario = await Usuario.findById( id );
         if ( !existeUsuario ) {
             throw new Error(`El id no existe: ${ id }`)
             }
         }
 
 
+        //Categorias
+const existeCategoriaPorId = async( id ) => {
+
+    const existeCategoria = await Categoria.findById( id );
+        if ( !existeCategoria ) {
+            throw new Error(`El id no existe: ${ id }`)
+            }
+        }
+
+
+        // Productos
+const existeProductoPorId = async( id ) => {
+
+    const existeProducto = await Producto.findById( id );
+        if ( !existeProducto ) {
+            throw new Error(`El id no existe: ${ id }`)
+            }
+        }
+
+
+        //Validar colecciones permitidas
+
+const coleccionesPermitidas = ( coleccion = '', colecciones = []) => {
+
+    const incluida = colecciones.includes( coleccion );
+    if ( !incluida ) {
+        throw new Error(`La coleccion ${ coleccion } no es permitida, ${ colecciones }`);
+    }
+
+    return true;
+
+}
+
 
  module.exports = {
     esRolValido,
     emailExiste,
-    existeUsuarioPorId
+    existeUsuarioPorId,
+    existeCategoriaPorId,
+    existeProductoPorId,
+    coleccionesPermitidas
  }
